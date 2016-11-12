@@ -1,0 +1,52 @@
+##
+# You should look at the following URL's in order to grasp a solid understanding
+# of Nginx configuration files in order to fully unleash the power of Nginx.
+# http://wiki.nginx.org/Pitfalls
+# http://wiki.nginx.org/QuickStart
+# http://wiki.nginx.org/Configuration
+#
+# Generally, you will want to move this file somewhere, and start with a clean
+# file but keep this around for reference. Or just disable in sites-enabled.
+#
+# Please see /usr/share/doc/nginx-doc/examples/ for more detailed examples.
+##
+
+# Default server configuration
+#
+
+server {
+	listen 80;
+        auth_basic "Restricted";                                              
+        auth_basic_user_file /etc/nginx/.htpasswd;
+	location / {
+		#root /usr/share/nginx/html;
+		root /etc/nginx/html;
+	}
+
+	# Nginx
+	location /nginx {
+		stub_status on;
+	}
+
+	# ShellInABox
+	location /shell {
+		proxy_pass http://localhost:4200/;
+	}
+
+	# Onwcloud
+	location /owncloud {
+		proxy_pass http://localhost:8080;
+	}
+
+	# File
+	location /files {
+		autoindex on;
+		alias /home/pi;
+	}
+
+	# Camera
+	location /cam {
+		proxy_pass http://localhost:8080/cam;
+	}
+}
+
